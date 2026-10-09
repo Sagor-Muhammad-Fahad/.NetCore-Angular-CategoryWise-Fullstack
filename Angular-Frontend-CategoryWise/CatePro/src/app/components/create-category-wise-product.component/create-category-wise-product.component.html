@@ -1,0 +1,109 @@
+<div class="container my-4" style="max-width: 900px;">
+  <div class="d-flex justify-content-between align-items-center mb-xl-4">
+    <h2 class="fw-bold text-dark mb-0">Create Category</h2>
+    <a routerLink="/categories" class="btn btn-outline-secondary">Back To List</a>
+  </div>
+  <form [formGroup]="categoryForm" (ngSubmit)="OnSubmit()">   
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Category Information</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">         
+          <label for="categoryName" class="form-label fw-semibold">Category Name</label>
+          <input 
+            type="text" 
+            id="categoryName" 
+            formControlName="name" 
+            class="form-control" 
+            placeholder="eg: Electronics"
+          />
+        </div>       
+      </div>     
+    </div>  
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Products</h5>
+        <button  type="button" (click)="addProduct()" 
+          class="btn btn-sm btn-light fw-bold">
+          + Add New Product </button>
+      </div>
+      <div class="card-body">
+        <div formArrayName="products">
+          @for (prod of products.controls; track $index) {
+            <div [formGroupName]="$index" class="p-3 mb-4 border-rounded bg-light position-relative">
+              <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                <h6 class="fw-bold text-primary mb-0">Product #{{ $index + 1 }}</h6>
+                <button 
+                  type="button" 
+                  class="btn btn-outline-danger" 
+                  [disabled]="products.length === 1" 
+                  (click)="removeProduct($index)">
+                  Remove Product
+                </button>
+              </div>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold">Product Name</label>
+                  <input type="text" formControlName="name" class="form-control form-control-sm" placeholder="product-1"/>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label small fw-semibold">Product Code</label>
+                  <input type="text" formControlName="productNumber" class="form-control form-control-sm" placeholder="1234"/>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold">Model</label>
+                  <select formControlName="modelId" class="form-select form-select-sm">
+                    <option value="">Select Model</option>
+                    @for (m of models; track m.modelId) {
+                      <option [value]="m.modelId">{{ m.name }}</option>
+                    }
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold">Price</label>
+                  <input type="number" formControlName="listPrice" class="form-control form-control-sm" placeholder="1000"/>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold">Cost</label>
+                  <input type="number" formControlName="standardCost" class="form-control form-control-sm" placeholder="1000"/>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold">Color</label>
+                  <input type="text" formControlName="color" class="form-control form-control-sm" placeholder="Black"/>
+                </div>
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold">Size</label>
+                  <input type="number" formControlName="size" class="form-control form-control-sm" placeholder="12"/>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label small fw-semibold">Weight</label>
+                  <input type="number" formControlName="weight" class="form-control form-control-sm" placeholder="12"/>
+                </div>
+                <div class="col-12">
+                    <label class="form-label small fw-semibold">Product Image</label>
+                    <input (change)="onFileSelected($event,$index)" type="file" class="form-control form-control-sm" accept="image/*"/>
+                    @if(imagePreviews[$index])
+                    {
+                        <div class="mt-2 d-flex align-items-center gap-3 p-2 bg-white rounded border">
+                            <img [src]="imagePreviews[$index]" alt="preview" class="img-thumbnail" style="height: 80px; width: 80px; object-fit: cover;">
+                            <div>
+                              <span class="badge bg-success mb-1" >Images Selected</span>
+                              <p class="small text-muted mb-0">{{products.at($index).value.image?.name}}</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <a routerLink="/categories" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn-success" [disabled]="categoryForm.invalid">Save</button>
+    </div>
+  </form>
+</div>

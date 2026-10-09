@@ -1,0 +1,119 @@
+<div class="container my-4">
+@if(isLoading()){
+    <div class="d-flex justify-content-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
+}
+@else {
+    <form (ngSubmit)="onSubmit()">
+        <div class="card mb-4 border-primary">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-4">Edit Category #{{category().categoryID}}</h4>
+                <a routerLink="/categories" class="btn btn-outline-light btn-sm">Back To List</a>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Category Name</label>
+                    <input type="text" class="form-control"[(ngModel)]="category().name" name="categoryName" required="">
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Product List</h5>
+                <button (click)="addProduct()" type="button" class="btn btn-light btn-sm">+ Add Product</button>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Code</th>
+                                <th>Model</th>
+                                <th>Price</th>
+                                <th>Cost</th>
+                                <th>Size</th>
+                                <th>Weight</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (product of category().products; track $index){
+                                <tr>
+                                    <td style="width: 100px;">
+                                        @if(product.imagePath){
+                                        <img [src]="categoryService.getImageUrl(product.imagePath)" style="height: 80px;width: 80px;">
+                                    }
+                                    <input (change)="onFileChange($event,$index)" type="file" class="form-control form-control-sm">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" name="'pName_'+$index" [(ngModel)]="product.name" required=""/>
+                                    </td>
+
+                                    <td>
+                                        <input type="text" class="form-control" [(ngModel)]="product.productNumber"
+                                        [name]="'pName_'+$index" required=""/>
+                                    </td>
+
+                                    <td>
+                                        <select class="form-select form-select-lg"[(ngModel)]="product.modelId"[name]="'Model_'+$index">
+
+                                           @for(model of models(); track model.modelId){
+                                            <option [value]="model.modelId">{{model.name}}</option>
+                                           }
+                                        </select>
+                                    </td>
+
+                                           <td>
+                                        <input type="number" class="form-control"[(ngModel)]="product.listPrice"
+                                        [name]="'pPrice_'+$index" required=""/>
+                                    </td>
+
+                                             <td>
+                                        <input type="number" class="form-control"[(ngModel)]="product.standardCost"
+                                        [name]="'pCost_'+$index" required=""/>
+                                    </td>
+
+                                                    <td>
+                                        <input type="text" class="form-control"[(ngModel)]="product.color"
+                                        [name]="'pColor_'+$index" required=""/>
+                                    </td>
+
+                                                            <td>
+                                        <input type="number" class="form-control"[(ngModel)]="product.size"
+                                        [name]="'pSize_'+$index" r/>
+                                    </td>
+
+                                                              <td>
+                                        <input type="number" class="form-control"[(ngModel)]="product.weight"
+                                        [name]="'pWeight_'+$index" />
+                                    </td>
+
+                                                                      <td>
+                                        <button (click)="removeProduct($index)" type="button" class="btn btn-danger">Remove</button>
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end gap-1">
+            <a routerLink="/categories" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-success" [disabled]="isSaving()">
+                @if(isSaving()){
+                    <span class="spinner-border spinner-border-sm me-1">Saving....</span>
+                }
+                @else {
+                    Save Change
+                }
+            </button>
+        </div>
+    </form>
+}
+</div>

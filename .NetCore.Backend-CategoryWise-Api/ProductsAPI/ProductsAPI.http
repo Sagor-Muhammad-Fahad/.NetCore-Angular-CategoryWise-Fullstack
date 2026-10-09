@@ -1,0 +1,19 @@
+@ProductsAPI_HostAddress = https://localhost:7115/ 
+# http://localhost:5289
+
+GET {{ProductsAPI_HostAddress}}/categories/
+Accept: application/json
+
+GET {{ProductsAPI_HostAddress}}/categories/{id}
+Accept: application/json
+
+POST {{ProductsAPI_HostAddress}}/categories/
+Accept: application/json
+
+PUT {{ProductsAPI_HostAddress}}/categories/{id}
+Accept: application/json
+
+DELETE {{ProductsAPI_HostAddress}}/categories/{id}
+Accept: application/json
+
+###
